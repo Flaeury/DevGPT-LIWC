@@ -36,7 +36,8 @@ with open("output_extracted_data.txt", "w", encoding="utf-8") as output_file:
                 print(extracted_data + "\n")
             else:
                 # Escrever erros no arquivo e no terminal
-                error_message = f"Falha ao acessar {link}: Status {response.status_code}\n\n"
+                error_message = f"Falha ao acessar {
+                    link}: Status {response.status_code}\n\n"
                 output_file.write(error_message)
                 print(error_message)
 

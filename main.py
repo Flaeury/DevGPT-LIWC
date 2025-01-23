@@ -25,10 +25,8 @@ def carregar_dicionario_liwc(dicionario_path):
 
     return dicionario
 
-# Função para contar a presença de categorias LIWC em uma mensagem
 
-
-# Dicionário com as categorias
+# Função para analisar a mensagem e retornar o nome das categorias com base nas contagens
 categorias = {
     1: "Pronouns",
     2: "Articles",
@@ -81,14 +79,10 @@ categorias = {
     49: "Fillers"
 }
 
-# Função para analisar a mensagem e retornar o nome das categorias com base nas contagens
-
 
 def analisar_mensagem_liwc(mensagem, liwc_dict):
-    # Inicializa com os nomes das categorias
     categorias_contadas = {categorias[i]: 0 for i in range(1, 50)}
 
-    # Dividir a mensagem em palavras e analisar
     for palavra in mensagem.split():
         palavra = palavra.lower().strip(",.?!;:'\"()[]{}")
         if palavra in liwc_dict:
@@ -115,84 +109,54 @@ with open(input_csv, "r", encoding="utf-8") as csvfile:
 
     # Criar um novo arquivo para salvar os resultados
     with open(output_csv, "w", encoding="utf-8", newline="") as outfile:
-        fieldnames = reader.fieldnames + \
-            ["UserMessage", "ChatGPTMessage", "UserLIWC", "BotLIWC"]
+        fieldnames = ["URL", "UserMessage",
+                      "ChatGPTMessage", "UserLIWC", "BotLIWC"]
         writer = csv.DictWriter(outfile, fieldnames=fieldnames)
         writer.writeheader()
 
         for row in reader:
-            for row in reader:
-                try:
-                    # Abrir o link no navegador
-                    driver.get(row["URL"])
-                    time.sleep(5)  # Aguardar o carregamento da página
+            try:
+                # Abrir o link no navegador
+                driver.get(row["URL"])
+                time.sleep(5)  # Aguardar o carregamento da página
 
-                    # Inicializar variáveis para as mensagens
-                    user_messages = []
-                    bot_messages = []
-
+                # Buscar as seções de conversa
+                conversations = driver.find_elements(By.TAG_NAME, "body")
+                for conversation in conversations:
                     try:
-                        # Buscar as seções de conversa
-                        conversations = driver.find_elements(
-                            By.TAG_NAME, "body")
+                        user_message_elem = conversation.find_elements(
+                            By.XPATH, ".//h5[text()='You said:']/following-sibling::div"
+                        )
+                        bot_message_elem = conversation.find_elements(
+                            By.XPATH, ".//h6[text()='ChatGPT said:']/following-sibling::div"
+                        )
 
-                        # Iterar sobre as conversas e separar o conteúdo
-                        for conversation in conversations:
-                            try:
-                                # Tentar pegar a mensagem do usuário
-                                user_message_elem = conversation.find_element(
-                                    By.XPATH, ".//h5[text()='You said:']/following-sibling::div"
-                                )
-                                user_message = user_message_elem.text
-                                user_messages.append(user_message)
+                        # Iterar e extrair todas as mensagens e respostas
+                        for i in range(len(user_message_elem)):
+                            user_message = user_message_elem[i].text
+                            bot_message = bot_message_elem[i].text
 
-                                # Tentar pegar a mensagem do ChatGPT
-                                bot_message_elem = conversation.find_element(
-                                    By.XPATH, ".//h6[text()='ChatGPT said:']/following-sibling::div"
-                                )
-                                bot_message = bot_message_elem.text
-                                bot_messages.append(bot_message)
+                            # Analisar mensagens com LIWC
+                            user_liwc = analisar_mensagem_liwc(
+                                user_message, liwc_dict)
+                            bot_liwc = analisar_mensagem_liwc(
+                                bot_message, liwc_dict)
 
-                            except Exception as inner_e:
-                                print(
-                                    f"Erro ao extrair uma mensagem específica: ")
-                                # Apenas pular para a próxima mensagem, sem interromper o loop principal
+                            # Escrever no CSV
+                            writer.writerow({
+                                "URL": row["URL"],
+                                "UserMessage": user_message,
+                                "ChatGPTMessage": bot_message,
+                                "UserLIWC": str(user_liwc),
+                                "BotLIWC": str(bot_liwc)
+                            })
 
-                    except Exception as conv_error:
-                        print(f"Erro ao buscar as conversas: {conv_error}")
-                        # Caso não consiga encontrar conversas, definir como N/A
-                        user_messages = ["N/A"]
-                        bot_messages = ["N/A"]
+                    except Exception as inner_e:
+                        print(
+                            f"Erro ao extrair mensagens específicas: {inner_e}")
 
-                    # Analisar as mensagens usando o LIWC
-                    try:
-                        user_liwc = [analisar_mensagem_liwc(
-                            msg, liwc_dict) for msg in user_messages]
-                        bot_liwc = [analisar_mensagem_liwc(
-                            msg, liwc_dict) for msg in bot_messages]
-                    except Exception as liwc_error:
-                        print(f"Erro ao analisar as mensagens com LIWC: {
-                              liwc_error}")
-                        user_liwc = ["N/A"]
-                        bot_liwc = ["N/A"]
+            except Exception as e:
+                print(f"Erro ao processar o link {row['URL']}: {e}")
 
-                    # Escrever a linha no arquivo CSV
-                    row["UserMessage"] = " || ".join(
-                        user_messages) if user_messages else "N/A"
-                    row["ChatGPTMessage"] = " || ".join(
-                        bot_messages) if bot_messages else "N/A"
-                    row["UserLIWC"] = str(user_liwc)
-                    row["BotLIWC"] = str(bot_liwc)
-
-                    writer.writerow(row)
-
-                except Exception as e:
-                    print(f"Erro ao processar o link {row['URL']}: {e}")
-                    row["UserMessage"] = "Erro ao acessar o link"
-                    row["ChatGPTMessage"] = "Erro ao acessar o link"
-                    row["UserLIWC"] = "N/A"
-                    row["BotLIWC"] = "N/A"
-                    writer.writerow(row)
-
-            # Fechar o navegador
+# Fechar o navegador
 driver.quit()

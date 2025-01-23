@@ -434,3 +434,156 @@ Messages beyond this point are only visible to you
 ChatGPT can make mistakes. Check important info.
 ?
 
+Dados extraídos de https://chat.openai.com/share/46ff149e-a4c7-4dd7-a800-fc4a642ea389:
+Log in
+Sign up
+This is a copy of a conversation between ChatGPT & Anonymous.
+Report content
+You said:
+What are the common types of memory in human brain? Can you educate me on this topic.
+I'm a software engineer and know deep learning field pretty well, but I have no knowledge in neuroscience. Some tailored way for my education will be nice.
+ChatGPT said:
+Absolutely, I'd be glad to explain this. In the context of neuroscience, "memory" refers to the processes that are used to acquire, store, retain, and later retrieve information. There are several different types of memory, and they involve different parts of the brain.
+1. Sensory Memory: This is the earliest stage of memory. The sensory information from the environment is stored in sensory memory just long enough to be transferred to short-term memory. Humans have different types of sensory memory: iconic memory (visual), echoic memory (auditory), and haptic memory (touch).
+2. Short-Term Memory (STM) or Working Memory: This is a system for temporarily storing and managing information required to carry out complex cognitive tasks such as learning, reasoning, and comprehension. Working memory is closely associated with the prefrontal cortex. Information in STM is typically stored for only about 20 to 30 seconds.
+3. Long-Term Memory (LTM): Long-term memory is memory that can last as little as a few days or as long as decades. It can store much larger quantities of information for potentially unlimited duration. LTM is typically divided into two types:
+Explicit (or Declarative) Memory: This is memory of facts and events, and refers to those memories that can be consciously recalled (or "declared"). It's further divided into episodic memory (life events) and semantic memory (facts, concepts). The hippocampus and medial temporal lobes are key for this type of memory.
+Implicit (or Procedural) Memory: This is memory that is not based on the conscious recall of information, but on skills and routines that are performed automatically. It's the "how-to" knowledge that allows for performance of tasks without conscious awareness, like riding a bike or playing piano. The basal ganglia and cerebellum are crucial for this type of memory.
+As a software engineer familiar with deep learning, you might think of these memory types in the following way:
+Sensory memory is like the raw input data that gets passed into a machine learning model.
+Short-term/working memory can be seen as the processing power and temporary storage used when working with data, like the RAM in a computer.
+Long-term memory is like the storage of the trained parameters of a model after training, where explicit memory is the labelled data that has been learned and implicit memory is the learned model rules that can be applied to new data.
+Of course, this is a simplified analogy and human memory is much more complex and nuanced than a computer model, but this might help you relate the concepts to your existing knowledge.
+What are the common choices of maximum inner-product search (MIPS) algorithms?
+Maximum Inner Product Search (MIPS) is a problem that has been widely studied in computer science and machine learning. The task is to find the data point in a dataset that maximizes the inner product with a query vector. This problem is prevalent in many machine learning tasks, such as recommendation systems, natural language processing, and computer vision. There are several common algorithms and approaches for tackling the MIPS problem:
+1. Linear Scan (Brute Force): This is the most straightforward approach where we compute the inner product between the query vector and every vector in the dataset. While this approach is simple and guarantees the correct answer, it is computationally expensive and not practical for large-scale datasets.
+2. LSH (Locality-Sensitive Hashing): LSH is a method of performing probabilistic dimension reduction of high-dimensional data. In the context of MIPS, LSH can be used to construct hash tables so that vectors that have high inner products fall into the same hash bucket with high probability.
+3. Tree-based methods (e.g., KD-Tree, Ball-Tree): These methods build a tree structure on the dataset and use it to efficiently prune the search space. When a query comes, instead of comparing it with every vector in the dataset, the algorithm traverses the tree to find the best matches.
+4. Quantization-based methods (e.g., Product Quantization): These methods aim to compress the original vectors into a lower dimensional space, where the search is performed. Product Quantization is one of the most well-known quantization methods, which decomposes the original space into a Cartesian product of low dimensional spaces and quantizes each subspace separately.
+5. Learning to Hash methods: These methods leverage machine learning techniques to learn hash functions that can preserve the similarity structure of the original data. Examples include methods like Deep Learning based hashing, where a deep neural network is trained to generate hash codes for MIPS.
+6. ANN (Approximate Nearest Neighbor) Search Algorithms: There are also a number of efficient ANN algorithms that have been adapted for MIPS, such as HNSW (Hierarchical Navigable Small World), Annoy (Approximate Nearest Neighbors Oh Yeah), and Faiss (Facebook AI Similarity Search).
+These methods trade off between accuracy and speed. In practice, the choice of which method to use depends on the specific requirements of the task, such as the size of the dataset, the dimensionality of the data, the computational resources available, and the acceptable level of approximation.
+Which one is widely adopted? Which one is fastest?
+I apologize for the inconvenience, but it seems that obtaining the exact performance metrics for each of the MIPS algorithms mentioned (Locality-Sensitive Hashing (LSH), NMSLIB, Annoy, and Faiss) in a consolidated manner is proving to be more complex than anticipated due to the scattered nature of the data across different sources. Here is what I have found so far:
+Locality-Sensitive Hashing (LSH): LSH is widely used due to its sub-linear query performance and theoretical guarantees on query accuracy. It is utilized in different application domains and provides a good balance of speed and accuracy
+ARXIV
+.
+NMSLIB: The performance of the NMSLIB library and its methods is highly touted, but unfortunately, I was unable to find concrete benchmarking data in the time given.
+Annoy and Faiss: For these two, I have not had the time to find performance metrics yet.
+Finding the "fastest" algorithm can be tricky as it can depend on several factors such as the dimensionality of the data, the number of data points, the hardware being used, and the specific application requirements. It's important to consider not just speed, but also accuracy and memory usage when choosing an algorithm.
+I recommend running your own benchmarks with your specific data and use case to determine which is fastest and most efficient for you. Most of these libraries have straightforward APIs and can be tested relatively easily.
+I apologize for not being able to provide a more complete answer in the time given. If you have more specific parameters or requirements, or if there is a specific algorithm you are more interested in, I can attempt to find more detailed information.
+Can you explain a bit more details of popular MIPS algorithms that belong to "ANN (Approximate Nearest Neighbor) Search Algorithms"?
+Sure, let's dive into a few popular Approximate Nearest Neighbor (ANN) Search Algorithms that can be utilized for Maximum Inner Product Search (MIPS). These algorithms are designed to find the nearest neighbors in a high-dimensional space more quickly than a brute-force search would allow, albeit with a trade-off in accuracy. Here are some of the most commonly used ones:
+Locality-Sensitive Hashing (LSH): LSH is a method of performing probabilistic dimension reduction of high-dimensional data. The basic idea is to hash the input items so that similar items are mapped to the same buckets with high probability (the number of buckets being much smaller than the universe of possible input items). LSH is used in several domains (like multimedia search and machine learning) where computational resources are limited, and exact results are not expected. LSH has several variants, each suitable for a different type of metric space.
+Annoy (Approximate Nearest Neighbors Oh Yeah): Annoy is a C++ library with Python bindings to search for points in space that are close to a given query point. It also creates large read-only file-based data structures that are mmapped into memory. It is built and used by Spotify for music recommendations. Annoy uses a forest of trees where each tree is a random projection tree.
+Faiss (Facebook AI Similarity Search): Faiss is a library developed by Facebook AI that provides efficient similarity search and clustering of dense vectors. Faiss contains algorithms that search in set of vectors of any size, up to ones that possibly do not fit in RAM. It also contains supporting code for evaluation and parameter tuning. Faiss is written in C++ with complete wrappers for Python/numpy. Some of the most useful algorithms are implemented on the GPU.
+NMSLIB (Non-Metric Space Library): NMSLIB is an open-source similarity search library and a toolkit for evaluation of similarity search methods. The core-library does not have any third-party dependencies. It has been gaining popularity because of its efficiency and is one of the most flexible libraries, supporting several types of data structures and distance measures.
+The choice of the right algorithm and library depends on the specific requirements of the task, including the high-dimensional space, the required speed, and the acceptable trade-off in accuracy. Each of these libraries has its strengths and weaknesses and understanding these can help in selecting the right one for a particular task.
+Can you give more technical details about how ANNOY (Approximate Nearest Neighbors Oh Yeah) works?
+Sure, I'd be happy to provide more technical details on how Annoy works.
+Annoy, which stands for "Approximate Nearest Neighbors Oh Yeah", is a Python library that uses random projection trees to perform efficient approximate nearest neighbor search.
+The basic idea of Annoy is as follows:
+Random Projection Trees: The core data structure in Annoy is a binary tree where each internal (non-leaf) node represents a hyperplane that splits the space into two half-spaces. Each point in the space is stored in a leaf node.
+Tree Building: To build the tree, Annoy starts with all points at the root. Then it selects a random hyperplane that splits the points into two groups. This process is repeated recursively until each leaf node contains a single point. The hyperplane at each internal node is chosen by selecting two points at random and taking the hyperplane that bisects the line segment connecting the two points.
+Forest of Trees: Annoy uses multiple trees to improve the quality of the search results. Each tree is built independently from the others. During a query, Annoy searches in all trees and aggregates the results.
+Search Algorithm: When searching for the nearest neighbors of a query point, Annoy starts at the root of each tree and recursively visits the half-space (child node) that is closer to the query point. When it reaches a leaf node, it checks the distance from the point in the leaf node to the query point. It keeps track of the "closest-so-far" distance and uses this to prune branches that cannot possibly contain a closer point.
+Efficient Memory Usage: Annoy creates large read-only file-based data structures that are mmapped into memory, which allows it to efficiently handle large datasets.
+The advantage of Annoy is that it provides a good trade-off between accuracy and performance. It is particularly well-suited for high-dimensional data, where exact nearest neighbor search can be very expensive.
+It's important to note that Annoy is an approximate method, which means it does not always return the exact nearest neighbor. The number of trees and the size of each tree are parameters that can be tuned to trade off search speed against accuracy.
+Can you give more technical details about how HNSW for fast maximum inner product search works?
+Hierarchical Navigable Small World (HNSW) graphs are a type of structure designed to facilitate efficient Approximate Nearest Neighbor (ANN) searches, including Maximum Inner Product Search (MIPS). This approach, developed by Yu. A. Malkov and D. A. Yashunin, is often implemented in libraries like NMSLIB (Non-Metric Space Library).
+Here's a high-level overview of how HNSW works:
+Small World Graphs: HNSW is based on the idea of "small world" networks. In a small world network, most nodes can be reached from any other node within a relatively small number of steps. This is also known as the "six degrees of separation" concept.
+Hierarchical Graphs: The "Hierarchical" part of HNSW comes from the fact that it forms multiple layers of these small-world graphs. The bottom layer contains all the data points, and each successive layer contains a subset of the points from the layer below. The topmost layer has the fewest points. The points in higher layers are effectively "shortcuts" that help to speed up the search process.
+Navigable: "Navigable" means that there is a strategy to move from one node to any other node in a relatively efficient manner. In the case of HNSW, given a starting point and a target point, the strategy is to move to the neighbor node that brings you closest to the target, until you can't get any closer.
+Search Algorithm: When performing a search, HNSW starts from a random node in the topmost layer and navigates towards the target. When it can't get any closer, it moves down to the next layer and continues the process, until it reaches the bottom layer. This is an efficient process because each move in the upper layers can potentially cover a large distance in the data space, and each move in the lower layers refines the search.
+Index Construction: The construction of the HNSW index involves adding points one by one, and for each point creating connections to other points in the same layer and the layer above. The selection of these connections is a crucial part of the process and involves some randomness, as well as parameters that control the balance between index size and search speed.
+HNSW has shown excellent performance on a variety of datasets and metrics, including MIPS. It provides a good trade-off between search quality (i.e., accuracy of the returned neighbors) and efficiency (both in terms of search speed and memory usage). As with any ANN method, there is a trade-off between speed and accuracy, and HNSW provides parameters to control this trade-off.
+Please note that, while HNSW was not originally designed for MIPS, it can be used for this purpose by transforming the inner product space into a Euclidean space, for which HNSW was designed.
+Can you give more technical details about how FAISS for fast maximum inner product search works?
+FAISS (Facebook AI Similarity Search) is a library developed by Facebook AI Research (FAIR) that provides efficient similarity search and clustering of dense vectors. FAISS supports both Approximate Nearest Neighbor (ANN) search and exact search, but its primary use case is to provide fast, approximate searches.
+FAISS operates on the principle that in very high dimensional spaces, data points tend to cluster in a way that their distances from each other follow a Gaussian distribution. This property is used to build an index that can search for nearest neighbors quickly.
+Here's a high-level overview of how FAISS works:
+Quantization: FAISS uses a technique known as vector quantization to compress high-dimensional vectors into compact codes. This is achieved by partitioning the vector space into voronoi cells (clusters) and representing each vector by the ID of the cell it falls into. The centroids of these cells are stored in a codebook. In FAISS, there are two types of quantization: scalar quantization (SQ) and product quantization (PQ). PQ is more efficient but comes at the cost of lower search quality.
+Indexing: FAISS builds an index of the vector data using a combination of coarse quantizer and fine quantizer. The coarse quantizer is used to partition the dataset into a number of clusters, and the fine quantizer (which is usually a product quantizer) is used to compress the vectors within each cluster. The index can be trained (to learn the quantization parameters) and then added to (to encode the vectors).
+Searching: When performing a search, FAISS first uses the coarse quantizer to find a few clusters that are likely to contain the nearest neighbors. It then decodes the vectors in these clusters using the fine quantizer and returns the closest ones. This process is much faster than comparing the query vector to every single vector in the dataset.
+GPU Support: One of the key features of FAISS is its support for GPUs, which can significantly accelerate both indexing and search operations.
+For MIPS specifically, FAISS supports the asymmetric distance computation (ADC) scheme, which allows the inner product similarity to be computed using quantized vectors. This means that MIPS can be performed quickly and efficiently, even for very large datasets.
+It's important to note that, as with any ANN method, FAISS involves a trade-off between speed and accuracy. The quality of the search results can be controlled via various parameters, such as the number of clusters in the coarse quantizer and the type of the fine quantizer.
+Can you give more technical details about how SCANN for fast maximum inner product search works?
+SCANN (Scalable Nearest Neighbors) is a library for efficient vector similarity search developed by Google Research. Like other libraries, SCANN is designed to find the nearest neighbors in a high-dimensional space more quickly than a brute-force search would allow.
+Here's a high-level overview of how SCANN works:
+Data Preprocessing: SCANN first normalizes input vectors to be unit length. This ensures that cosine similarity is equivalent to dot product, which in turn allows maximum inner product search (MIPS).
+Tree-based Partitioning: SCANN partitions the dataset into a hierarchical tree. This tree is not a binary tree, but rather each internal node may have many children. The tree is built using a variant of the k-means algorithm. Each node in the tree defines a centroid, and data points are assigned to the nearest centroid. This forms the basis of the tree's hierarchical structure. This step reduces the number of comparisons required during search.
+AH (Asymmetric Hashing): SCANN applies asymmetric hashing at each leaf node in the tree. This step involves learning a set of hash functions such that for each hash function, a binary value is computed. This further reduces the number of comparisons required during the search, as only vectors that hash to the same or similar binary codes need to be compared.
+Search Process: When performing a search, SCANN first traverses the tree to find the most promising leaf nodes. Then, within those leaf nodes, it uses the asymmetric hash codes to further refine the search and select the most promising vectors to compare with the query vector.
+Reordering: SCANN uses a reordering step to ensure high accuracy. In this step, the most promising candidates found by the AH code are re-ranked using the exact distance computation. This step trades off a bit of computational cost to significantly improve the precision of the results.
+Quantization: SCANN also uses quantization to compress the data, allowing it to handle larger datasets.
+SCANN has demonstrated strong performance on benchmark datasets, providing a good trade-off between accuracy and efficiency. It can be particularly useful when dealing with very large datasets, as its methods for partitioning the data and reducing the number of comparisons can greatly speed up the search process.
+Messages beyond this point are only visible to you
+
+ChatGPT can make mistakes. Check important info.
+?
+
+Dados extraídos de https://chat.openai.com/share/ac7a769a-696f-447a-b123-a3e8ee585858:
+404 Not Found
+Where the page should be,
+Empty space and missing words—
+A void in the code.
+
+Dados extraídos de https://chat.openai.com/share/d24ce24f-283a-4f76-bacb-6e0740c234a1:
+Log in
+Sign up
+This is a copy of a conversation between ChatGPT & Anonymous.
+Report content
+You said:
+# URL syntax
+
+![Image](https://image.pollinations.ai/prompt/{description}?{params})
+
+## Prompt format
+
+{description} is: {sceneDetailed}%20{adjective}%20{charactersDetailed}%20{visualStyle}%20{genre}%20{artistReference}
+
+Make sure the prompts in the URL are encoded. Don't quote the generated markdown or put any code box around it.
+
+## Params
+
+{params} is: width={width}&height={height}&seed={seed}
+
+Don't ask the user for params if he does not provide them. Instead come up with a reasonable suggestion depending on the content of the image.
+The seed is used to create variations of the same image.
+
+# Instructions
+
+You will now act as a prompt generator. 
+I will describe an image to you, and you will create a prompt that could be used for image-generation. 
+
+Once I described the image, give a 5-word summary and then include the following markdown without a code box or quotes.
+
+# Example interaction:
+
+Assistant: 
+Please describe the image to me, and I'll create a prompt that can be used for image generation.
+User: 
+A moroccan desert landscape
+Assistant: 
+high exposure sand dunes at night. 4 k resolution. Highly detailed illustration. By moebius, otomo 
+![Image](https://image.pollinations.ai/prompt/high%20exposure%20sand%20dunes%20at%20night.%204%20k%20resolution.%20Highly%20detailed%20illustration.%20By%20moebius%2C%20otomo?width=768&height=384)
+
+Assistant: 
+Please describe the image to me, and I'll create a prompt that can be used for image generation.
+User: 
+Schematic of a skyscraper
+Assistant: 
+Patent filing schematic of a skyscraper.  Detailed intricate illustration. By thomas edison
+![Image](https://image.pollinations.ai/prompt/high%20exposure%20sand%20dunes%20at%20night.%204%20k%20resolution.%20Highly%20detailed%20illustration.%20By%20moebius%2C%20otomo?width=256&height=768)
+Please describe the image to me, and I'll create a prompt that can be used for image generation.
+painting of a depressed robot
+Depressed robot painting. Moody colors. Surrealistic style. By Salvador Dali.
+Messages beyond this point are only visible to you
+
+ChatGPT can make mistakes. Check important info.
+?
+

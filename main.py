@@ -25,69 +25,18 @@ def carregar_dicionario_liwc(dicionario_path):
 
     return dicionario
 
-
-# Função para analisar a mensagem e retornar o nome das categorias com base nas contagens
-categorias = {
-    1: "Pronouns",
-    2: "Articles",
-    3: "Past tense",
-    4: "Present tense",
-    5: "Future tense",
-    6: "Prepositions",
-    7: "Negations",
-    8: "Numbers",
-    9: "Swear words",
-    10: "Social Processes",
-    11: "Friends",
-    12: "Family",
-    13: "Humans",
-    14: "Affective Processes",
-    15: "Positive Emotions",
-    16: "Negative Emotions",
-    17: "Anxiety",
-    18: "Anger",
-    19: "Sadness",
-    20: "Cognitive Processes",
-    21: "Insight",
-    22: "Causation",
-    23: "Discrepancy",
-    24: "Tentative",
-    25: "Certainty",
-    26: "Inhibition",
-    27: "Inclusive",
-    28: "Exclusive",
-    29: "Perceptual Processes",
-    30: "Seeing",
-    31: "Hearing",
-    32: "Feeling",
-    33: "Biological Processes",
-    34: "Body",
-    35: "Sexuality",
-    36: "Relativity",
-    37: "Motion",
-    38: "Space",
-    39: "Time",
-    40: "Work",
-    41: "Achievement",
-    42: "Leisure",
-    43: "Home",
-    44: "Money",
-    45: "Religion",
-    46: "Death",
-    47: "Assent",
-    48: "Nonfluencies",
-    49: "Fillers"
-}
+# Função para analisar a mensagem e retornar as contagens por categorias
 
 
 def analisar_mensagem_liwc(mensagem, liwc_dict):
-    categorias_contadas = {categorias[i]: 0 for i in range(1, 50)}
+    # Contador para cada categoria
+    categorias_contadas = {i: 0 for i in range(1, 50)}
 
     for palavra in mensagem.split():
         palavra = palavra.lower().strip(",.?!;:'\"()[]{}")
         if palavra in liwc_dict:
             for categoria in liwc_dict[palavra]:
-                categorias_contadas[categorias[categoria]] += 1
+                categorias_contadas[categoria] += 1
 
     return categorias_contadas
 
@@ -103,14 +52,33 @@ liwc_dict_path = "LIWC.dic"  # Caminho para o dicionário LIWC
 # Carregar o dicionário LIWC
 liwc_dict = carregar_dicionario_liwc(liwc_dict_path)
 
+# Categorias do LIWC
+categorias_dict = {
+    1: "Pronouns", 2: "Articles", 3: "Past tense", 4: "Present tense",
+    5: "Future tense", 6: "Prepositions", 7: "Negations", 8: "Numbers",
+    9: "Swear words", 10: "Social Processes", 11: "Friends", 12: "Family",
+    13: "Humans", 14: "Affective Processes", 15: "Positive Emotions",
+    16: "Negative Emotions", 17: "Anxiety", 18: "Anger", 19: "Sadness",
+    20: "Cognitive Processes", 21: "Insight", 22: "Causation", 23: "Discrepancy",
+    24: "Tentative", 25: "Certainty", 26: "Inhibition", 27: "Inclusive",
+    28: "Exclusive", 29: "Perceptual Processes", 30: "Seeing", 31: "Hearing",
+    32: "Feeling", 33: "Biological Processes", 34: "Body", 35: "Sexuality",
+    36: "Relativity", 37: "Motion", 38: "Space", 39: "Time", 40: "Work",
+    41: "Achievement", 42: "Leisure", 43: "Home", 44: "Money", 45: "Religion",
+    46: "Death", 47: "Assent", 48: "Nonfluencies", 49: "Fillers"
+}
+
 # Abrir o arquivo CSV para leitura
 with open(input_csv, "r", encoding="utf-8") as csvfile:
     reader = csv.DictReader(csvfile)
 
     # Criar um novo arquivo para salvar os resultados
     with open(output_csv, "w", encoding="utf-8", newline="") as outfile:
-        fieldnames = ["URL", "UserMessage",
-                      "ChatGPTMessage", "UserLIWC", "BotLIWC"]
+        # Configurar os cabeçalhos dinâmicos (URL, UserMessage, ChatGPTMessage, categorias)
+        fieldnames = ["URL", "UserMessage", "ChatGPTMessage"]
+        fieldnames += [f"User_{categorias_dict[i]}" for i in range(1, 50)]
+        fieldnames += [f"Bot_{categorias_dict[i]}" for i in range(1, 50)]
+
         writer = csv.DictWriter(outfile, fieldnames=fieldnames)
         writer.writeheader()
 
@@ -137,19 +105,26 @@ with open(input_csv, "r", encoding="utf-8") as csvfile:
                             bot_message = bot_message_elem[i].text
 
                             # Analisar mensagens com LIWC
-                            user_liwc = analisar_mensagem_liwc(
+                            user_liwc_counts = analisar_mensagem_liwc(
                                 user_message, liwc_dict)
-                            bot_liwc = analisar_mensagem_liwc(
+                            bot_liwc_counts = analisar_mensagem_liwc(
                                 bot_message, liwc_dict)
 
-                            # Escrever no CSV
-                            writer.writerow({
+                            # Criar linha de saída com dados dinâmicos
+                            row_data = {
                                 "URL": row["URL"],
                                 "UserMessage": user_message,
                                 "ChatGPTMessage": bot_message,
-                                "UserLIWC": str(user_liwc),
-                                "BotLIWC": str(bot_liwc)
-                            })
+                            }
+
+                            # Adicionar contagens de categorias
+                            row_data.update(
+                                {f"User_{categorias_dict[k]}": user_liwc_counts[k] for k in range(1, 50)})
+                            row_data.update(
+                                {f"Bot_{categorias_dict[k]}": bot_liwc_counts[k] for k in range(1, 50)})
+
+                            # Escrever no CSV
+                            writer.writerow(row_data)
 
                     except Exception as inner_e:
                         print(

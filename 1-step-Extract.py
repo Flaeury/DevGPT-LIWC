@@ -52,4 +52,4 @@ def extract_conversations(input_csv, output_csv):
 
 if __name__ == "__main__":
     extract_conversations(
-        "DevGPT/snapshot_20230727/ChatGPT_Link_Sharing2.csv", "CSV/extracted_data.csv")
+        "DevGPT/snapshot_20230727/ChatGPT_Link_Sharing.csv", "CSV/extracted_data.csv")

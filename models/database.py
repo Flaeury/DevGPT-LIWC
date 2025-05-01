@@ -1,5 +1,5 @@
 import sqlite3  # ou outro banco
-import models.connection as database
+import models.create_table as database
 import csv
 
 db = database.conexao()
